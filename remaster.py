@@ -66,7 +66,7 @@ if not opt.disable_colorization:
       for ext in ext_list:
          reference_files += glob.glob( opt.reference_dir+'/*.'+ext, recursive=True )
       aspect_mean = 0
-      minedge_dim = 256
+      minedge_dim = opt.mindim
       refs = []
       for v in reference_files:
          refimg = Image.open( v ).convert('RGB')
@@ -74,8 +74,8 @@ if not opt.disable_colorization:
          aspect_mean += w/h
          refs.append( refimg )
       aspect_mean /= len(reference_files)
-      target_w = int(256*aspect_mean) if aspect_mean>1 else 256
-      target_h = 256 if aspect_mean>=1 else int(256/aspect_mean)
+      target_w = int(minedge_dim*aspect_mean) if aspect_mean>1 else minedge_dim
+      target_h = minedge_dim if aspect_mean>=1 else int(minedge_dim/aspect_mean)
       refimgs = torch.FloatTensor(len(reference_files), 3, target_h, target_w)
       for i, v in enumerate(refs):
          refimg = utils.addMergin( v, target_w=target_w, target_h=target_h )
