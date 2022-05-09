@@ -67,7 +67,7 @@ if not opt.disable_colorization:
       for ext in ext_list:
          reference_files += glob.glob( opt.reference_dir+'/*.'+ext, recursive=True )
       aspect_mean = 0
-      minedge_dim = opt.ratio
+      minedge_dim = 256
       refs = []
       for v in reference_files:
          refimg = Image.open( v ).convert('RGB')
