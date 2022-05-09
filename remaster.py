@@ -33,6 +33,7 @@ parser.add_argument('--gpu',       action='store_true', default=False, help='Use
 parser.add_argument('--mindim',     type=int,   default='320',    help='Length of minimum image edges')
 parser.add_argument('--frame_start',   type=int,   default='0',    help='Start frame from where to start process the input video')
 parser.add_argument('--frame_end',     type=int,   default='-1',    help='End frame, does not process frames beyond that, -1=last frame')
+parser.add_argument('--ratio',     type=int,   default='256',    help='Ratio of ref images to video')
 opt = parser.parse_args()
 
 device = torch.device('cuda:0' if opt.gpu else 'cpu')
@@ -66,7 +67,7 @@ if not opt.disable_colorization:
       for ext in ext_list:
          reference_files += glob.glob( opt.reference_dir+'/*.'+ext, recursive=True )
       aspect_mean = 0
-      minedge_dim = (opt.mindim*0.8)
+      minedge_dim = opt.ratio
       refs = []
       for v in reference_files:
          refimg = Image.open( v ).convert('RGB')
@@ -74,8 +75,8 @@ if not opt.disable_colorization:
          aspect_mean += w/h
          refs.append( refimg )
       aspect_mean /= len(reference_files)
-      target_w = int(minedge_dim*aspect_mean) if aspect_mean>1 else minedge_dim
-      target_h = minedge_dim if aspect_mean>=1 else int(minedge_dim/aspect_mean)
+      target_w = int(opt.ratio*aspect_mean) if aspect_mean>1 else opt.ratio
+      target_h = opt.ratio if aspect_mean>=1 else int(opt.ratio/aspect_mean)
       refimgs = torch.FloatTensor(len(reference_files), 3, target_h, target_w)
       for i, v in enumerate(refs):
          refimg = utils.addMergin( v, target_w=target_w, target_h=target_h )
