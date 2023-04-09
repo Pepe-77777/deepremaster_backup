@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# md5sum 1219f5830e4a7208b1c7ba2f089a16c8
-
 FILENAME="remasternet.pth.tar"
 FILEURL="https://web.archive.org/web/20210825063317/http://iizuka.cs.tsukuba.ac.jp/data/remasternet.pth.tar"
 
